@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=kali
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
+  auctionservice:
+    image: auctionservice
+    build:
+      context: .
+      dockerfile: AuctionService/Dockerfile
