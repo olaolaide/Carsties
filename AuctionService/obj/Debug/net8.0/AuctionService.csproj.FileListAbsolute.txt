@@ -113,3 +113,4 @@ C:\Users\Abimbola\RiderProjects\Carsties\AuctionService\obj\Debug\net8.0\refint\
 C:\Users\Abimbola\RiderProjects\Carsties\AuctionService\obj\Debug\net8.0\AuctionService.pdb
 C:\Users\Abimbola\RiderProjects\Carsties\AuctionService\obj\Debug\net8.0\AuctionService.genruntimeconfig.cache
 C:\Users\Abimbola\RiderProjects\Carsties\AuctionService\obj\Debug\net8.0\ref\AuctionService.dll
+C:\Users\Abimbola\RiderProjects\Carsties\AuctionService\obj\Debug\net8.0\AuctionService.sourcelink.json

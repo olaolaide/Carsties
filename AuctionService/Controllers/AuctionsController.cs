@@ -2,6 +2,7 @@
 using AuctionService.DTOs;
 using AuctionService.Entities;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,11 +13,16 @@ namespace AuctionService.Controllers;
 public class AuctionsController(AuctionDbContext context, IMapper mapper) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<AuctionDto>>> GetAllAuction()
+    public async Task<ActionResult<List<AuctionDto>>> GetAllAuction(string date)
     {
-        var auctions = await context.Auctions.Include(x => x.Item)
-            .OrderBy(x => x.Item.Make).ToListAsync();
-        return mapper.Map<List<AuctionDto>>(auctions);
+        var query = context.Auctions.OrderBy(x => x.Item.Make).AsQueryable();
+        if (!string.IsNullOrEmpty(date))
+        {
+            var parsedDate = DateTime.Parse(date).ToUniversalTime();
+            query = query.Where(x => x.UpdatedAt.CompareTo(parsedDate) > 0);
+        }
+
+        return await query.ProjectTo<AuctionDto>(mapper.ConfigurationProvider).ToListAsync();
     }
 
     [HttpGet("{id:guid}")]
@@ -51,6 +57,7 @@ public class AuctionsController(AuctionDbContext context, IMapper mapper) : Cont
     {
         var auction = await context.Auctions.Include(x => x.Item).FirstOrDefaultAsync(x => x.Id == id);
         if (auction == null) return NotFound();
+
         // Todo check seller equals username
         auction.Item.Make = updateAuctionDto.Make ?? auction.Item.Make;
         auction.Item.Model = updateAuctionDto.Model ?? auction.Item.Model;
